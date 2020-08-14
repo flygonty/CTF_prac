@@ -51,4 +51,7 @@ int main()
     4. set breakpoint at  b*0x0000000000400738
     5. press "c" button
     6. press 'enter' button
-    7. We could see the stack and find the return address
+    7. We could see the stack and find the place which program jump
+    8. paste the address to the payload then it could workf
+    
+    `Hint: objdump -d -M intel bof2 to find the address you actually want to jump`
