@@ -52,6 +52,33 @@ int main()
     5. press "c" button
     6. press 'enter' button
     7. We could see the stack and find the place which program jump
-    8. paste the address to the payload then it could workf
+    8. paste the address to the payload then it could work
     
-    `Hint: objdump -d -M intel bof2 to find the address you actually want to jump`
+    `Hint: use objdump -d -M intel bof2 to find the address you want to jump`
+    
+```
+0000000000400697 <y0u_c4n7_533_m3>:
+  400697:       55                      push   rbp
+  400698:       48 89 e5                mov    rbp,rsp
+  40069b:       48 83 ec 10             sub    rsp,0x10
+  40069f:       c7 45 fc 00 00 00 00    mov    DWORD PTR [rbp-0x4],0x0
+  4006a6:       83 7d fc 00             cmp    DWORD PTR [rbp-0x4],0x0
+  4006aa:       74 18                   je     4006c4 <y0u_c4n7_533_m3+0x2d>
+  4006ac:       ba 00 00 00 00          mov    edx,0x0
+  4006b1:       be 00 00 00 00          mov    esi,0x0
+  4006b6:       48 8d 3d 1b 01 00 00    lea    rdi,[rip+0x11b]        # 4007d8 <_IO_stdin_used+0x8>
+  4006bd:       e8 be fe ff ff          call   400580 <execve@plt>
+  4006c2:       eb 16                   jmp    4006da <y0u_c4n7_533_m3+0x43>
+  4006c4:       48 8d 3d 15 01 00 00    lea    rdi,[rip+0x115]        # 4007e0 <_IO_stdin_used+0x10>
+  4006cb:       e8 80 fe ff ff          call   400550 <puts@plt>
+  4006d0:       bf 00 00 00 00          mov    edi,0x0
+  4006d5:       e8 c6 fe ff ff          call   4005a0 <exit@plt>
+  4006da:       c9                      leave
+  4006db:       c3                      ret
+
+```
+
+    Because x86-64 calling convention, when program call execve this syscall
+    It would use rdi, rsi and rdx. In 4006ac the program has loaded /bin/sh
+    and need to get rsi and rdx so the next instruction edx,0x0 is the perfect
+    address we want to jump.
