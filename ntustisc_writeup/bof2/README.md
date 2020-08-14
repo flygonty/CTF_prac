@@ -36,7 +36,19 @@ int main()
 
     Firstly, we need to bypass strlen function(func)
     This func could be bypass by \x00 first becasue strlen would check
-    it's first byte if the first byte is \x00 then the result of strlen woule be 0
+    It's first byte if the first byte is \x00 
+    Then the result of strlen woule be 0
+    Once we success bypass strlen, we need to find the offset 
+    And try to return to y0u_c4n7_533_m3()
+    Use gdb-peda and pwntools to find the padding
+    But I'm not familiar with pwntools QQ
+    So, I use brute force to try to find offset
     
-    Once we success bypass strlen, we need to find the offset and try to return to          y0u_c4n7_533_m3()
-   
+    Here's my procees
+    1. python solve.py // while program would be stopped by raw_input()
+    2. gdb ./bof2
+    3. at // attach to solve.py
+    4. set breakpoint at  b*0x0000000000400738
+    5. press "c" button
+    6. press 'enter' button
+    7. We could see the stack and find the return address
